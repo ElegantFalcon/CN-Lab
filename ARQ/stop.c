@@ -18,7 +18,7 @@ int main()
     int packet = 1;
     int ack_received;
 
-    while (packet < TOTAL_PACKETS)
+    while (packet <= TOTAL_PACKETS)
     {
         printf("Sending packet %d....\n", packet);
 

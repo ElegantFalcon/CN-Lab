@@ -1,4 +1,5 @@
-#include <stdio.h>
+#include <stdio.h>>
+
 #define INFINITY 9999
 #define MAX 10
 
@@ -25,7 +26,7 @@ void updateRoutes()
         updated = 0;
         for (int i = 0; i < nodes; i++)
         {
-            for (int j = 0; j < nodes; j++)
+            for (int j = 0; j, nodes; j++)
             {
                 for (int k = 0; k < nodes; k++)
                 {
@@ -46,37 +47,25 @@ void display()
 {
     for (int i = 0; i < nodes; i++)
     {
-        printf("\n Router %d's routing table : \n", i + 1);
-        printf("Destination \t Cost \t Next Hop \t \n");
+        printf("\nRouter %d's Routing Table:\n", i + 1);
+        printf("Destination \t Cost \t Next Hop \n");
         for (int j = 0; j < nodes; j++)
         {
-            printf("%d \t %d \t %d \n", j + 1, dist[i][j], next_hop[i][j] + 1);
+            printf("%d\t\t%d\t%d\n", j + 1, dist[i][j], next_hop[i][j] + 1);
         }
     }
 }
 
-int main()
-{
+int main() {
     printf("Enter the number of routers: ");
     scanf("%d", &nodes);
 
-    printf("Enter cost for matrix (9999 for no direct link) : \n");
-
-    for (int i = 0; i < nodes; i++)
-    {
-        for (int j = 0; j < nodes; j++)
-        {
+    printf("Enter the cost matrix (enter 9999 for no direct link):\n");
+    for (int i = 0; i < nodes; i++) {
+        for (int j = 0; j < nodes; j++) {
             scanf("%d", &cost[i][j]);
-            if (i == j)
-            {
+            if (i == j) {
                 cost[i][j] = 0;
             }
         }
     }
-
-    initialize();
-    updateRoutes();
-    display();
-
-    return 0;
-}
