@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <time.h>
+#include <string.h>
+#include <unistd.h>
 
 #define WINDOW_SIZE 4
 #define TOTAL_FRAMES 10
@@ -9,34 +10,34 @@
 
 int send_frame(int frame_number)
 {
-    printf("Sending frame....%d..\n", frame_number);
+    printf("Sending frame number %d \n", frame_number);
     sleep(1);
-    int rand_value = rand() % 100;
-    if (rand_value < LOSS_PROBABILITY)
+    int rand = random() % 100;
+    if (rand < LOSS_PROBABILITY)
     {
-        printf("Frame %d lost during transmission.. \n", frame_number);
+        printf("Frame %d lost during transmission \n", frame_number);
         return 0;
     }
     else
     {
-        printf("Frame sentt....\n");
+        printf("Frame %d received succesfully \n", frame_number);
         return 1;
     }
 }
 
 int receive_ack(int frame_number)
 {
-    printf("Receiving ack for frame ...%d..\n", frame_number);
+    printf("Receiving acknowledgement for frame number %d \n", frame_number);
     sleep(1);
-    int rand_value = rand() % 100;
-    if (rand_value < LOSS_PROBABILITY)
+    int rand = random() % 100;
+    if (rand < LOSS_PROBABILITY)
     {
-        printf("Ack %d lost .. \n", frame_number);
+        printf("Ack %d lost during transmission \n", frame_number);
         return 0;
     }
     else
     {
-        printf("Ack received .. \n");
+        printf("Ack %d received succesfully \n", frame_number);
         return 1;
     }
 }
@@ -44,12 +45,13 @@ int receive_ack(int frame_number)
 void selective()
 {
     int sent_frames[TOTAL_FRAMES] = {0};
-    int ack_received[TOTAL_FRAMES] = {0};
+    int recieved_ack[TOTAL_FRAMES] = {0};
     int base = 0;
 
     while (base < TOTAL_FRAMES)
     {
-        for (int i = base; i < base + WINDOW_SIZE && i < TOTAL_FRAMES; i++)
+
+        for (int i = 0; i < base + WINDOW_SIZE && i < TOTAL_FRAMES; i++)
         {
             if (!sent_frames[i])
             {
@@ -57,27 +59,26 @@ void selective()
             }
         }
 
-        for (int i = base; i < base + WINDOW_SIZE && i < TOTAL_FRAMES; i++)
+        for (int i = 0; i < base + WINDOW_SIZE && i < TOTAL_FRAMES; i++)
         {
-            if (sent_frames[i] && !ack_received[i])
+            if (sent_frames[i] && !recieved_ack[i])
             {
-                ack_received[i] = receive_ack(i);
+                recieved_ack[i] = receive_ack(i);
             }
         }
 
-        while (base < TOTAL_FRAMES && ack_received[base])
+        while (base < TOTAL_FRAMES && recieved_ack[base])
         {
-            printf("Sliding window forward..Frame %d acknowledged..\n", base);
+            printf("Sliding window forward. frame %d fully acknowledged \n", base);
             base++;
         }
     }
 
-    printf("All frames sent and acknowledged successfully.\n");
+    printf("All frames acked succesfully");
 }
 
-int main()
+void main()
 {
-    srand(time(0)); // Seed random number generator
+    srand(time(0));
     selective();
-    return 0;
 }
